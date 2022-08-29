@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cp4ba-postdeploy-md
+  namespace: output-info
+data:
+  postdeploy.md: |-

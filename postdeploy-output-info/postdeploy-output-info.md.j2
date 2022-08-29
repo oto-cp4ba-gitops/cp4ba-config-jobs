@@ -1,0 +1,26 @@
+# CP4BA One-Touch-Provisioning with Gitops post-deploy
+
+* Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=deployments-completing-post-installation-tasks
+* Adapted from https://github.com/apollo-business-automation/ibm-cp4ba-enterprise-deployment/blob/main/scripts/roles/cp4ba/templates/postdeploy.md.j2
+  - Whereas the Apollo Oone-shot enterprise deployment relies heavily on Ansible automation, this One-Touch provisioning relies onGitOps. 
+  - There should be little room in this mode of provisioning for anything other than the declarative expression of desired state via GitOps/Argo CD.
+
+For logging in to CP4BA pillars use *Authentication type: Enterprise LDAP* and user *cpadmin* with password "{{ cp4ba_universal_password }}" if not stated otherwise.
+
+## FileNet Content Manager (FNCM) (content pattern)
+
+Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=tasks-filenet-content-manager
+
+### IER configuration
+
+Follow official documentation at https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=fcm-configuring-enterprise-records to finish IER configuration.
+URLs are available in *apollo-one-shot* Project in *usage* ConfigMap (IER CPE HTTP URL and IER application plugin).
+
+Some steps were already automated:
+- FPOS and ROS were created
+- CPE Configuration URL was created (https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=records-creating-content-platform-engine-route-http-protocol)
+- IER config mgr was run to setup FPOS and ROS for IER (https://www.ibm.com/docs/en/enterprise-records/5.2.1?topic=rercmbucl-creating-object-store-configuration-new-installation-profile-by-using-commands)
+- Task Manager pod has TM_JOB_URL parameter set (https://www.ibm.com/docs/en/enterprise-records/5.2.1?topic=in-configuring-content-navigator-task-manager-enterprise-records)
+- Additional Jars and configs were added to Task manager (https://www.ibm.com/docs/en/enterprise-records/5.2.1?topic=in-configuring-content-navigator-task-manager-enterprise-records)
+- Task manager pod restarted (https://www.ibm.com/docs/en/enterprise-records/5.2.1?topic=in-configuring-content-navigator-task-manager-enterprise-records)
+
