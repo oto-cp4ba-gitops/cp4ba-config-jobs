@@ -1,0 +1,28 @@
+## Business Automation Studio (BAS) (foundation pattern)
+
+Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=tasks-business-automation-studio
+
+### Deploy toolkits and configurators
+
+Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=reference-downloadable-toolkits
+
+To your local system download the following
+- TWX file from https://github.com/icp4a/odm-toolkit/tree/master/contribution/1.2/Action%20Configurator
+- TWX file from https://github.com/icp4a/odm-toolkit/tree/master/contribution/1.2/Toolkit
+
+Go to Studio https://cpd-{{ cp4ba_project_name }}.{{ apps_endpoint_domain }}/bas/BAStudio/build/index.jsp?#/apps/platformRepo  
+Login with Enterprise LDAP with cpadmin / {{ cp4ba_universal_password }}  
+
+Click Toolkits  
+Click Import  
+Import all files that you downloaded one by one  
+Some of them are used as Configurators, don't be confused that they don't appear in the list of toolkits.  
+
+## Business Automation Insights (BAI) (foundation pattern)
+
+### Configure Workforce insights
+
+Part of WFI configuration has already been done automatically.
+
+Set up WFI following https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=dashboards-enabling-workforce-insights
+
