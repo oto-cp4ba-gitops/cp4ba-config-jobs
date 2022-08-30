@@ -3,5 +3,6 @@ kind: ConfigMap
 metadata:
   name: cp4ba-postdeploy-md
   namespace: output-info
+immutable: true
 data:
   postdeploy.md: |-
