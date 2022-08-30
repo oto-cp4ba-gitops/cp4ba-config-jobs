@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postdeploy-output-info
+  namespace: output-info
+spec:
+  template:
+    spec:
+      serviceAccountName: postdeploy-output-info-sa
+      containers:
+      - name: output-info-config
+        image: quay.io/jeffetan/postdeploy-output-info
+        command: ["./postdeploy_configmap.sh"]
+        env:
+        - name: KUBECONFIG
+          value: "/tmp/config"
+        args: ["-p", "foundation"]
+        imagePullPolicy: Always
+      restartPolicy: OnFailure
+  backoffLimit: 2
