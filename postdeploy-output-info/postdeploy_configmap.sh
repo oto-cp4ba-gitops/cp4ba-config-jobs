@@ -20,8 +20,8 @@ else
 fi
 
 # Check for required files to start with, i.e.,
-# jinja2 template, python/jinja2 script, and the configmap yaml:
-for f in templates/postdeploy-output-info.md.j2 jinja_fill.py postdeploy_configmap.yaml; do
+# jinja2 template and the python/jinja2 script
+for f in templates/postdeploy-output-info.md.j2 jinja_fill.py; do
     if [ ! -e $f ]; then
         echo "$0: Missing file '$f'"
         exit 1
@@ -49,7 +49,21 @@ if [ $? -gt 0 ]; then
 fi
 # If exitcode is zero, show stdout. It should report success.
 echo $runout
-# At this point, postdeploy.md should be ready. Append to empty data, indented properly:
+# Create the configmap yaml with the empty postdeploy.md object:
+cat <<EOF > postdeploy_configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cp4ba-postdeploy-md
+  namespace: output-info
+  finalizers:
+    - argoproj.io/finalizer
+immutable: true
+data:
+  postdeploy.md: |-
+EOF
+# jinja_fill command above should have already prepared the file postdeploy.md.
+# Append that to the empty data object in the configmap yaml, indented properly:
 cat postdeploy.md | sed 's/^/    /' >> postdeploy_configmap.yaml
 
 # Just in case it already exists in the cluster, remove it first:
