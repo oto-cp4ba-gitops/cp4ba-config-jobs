@@ -7,6 +7,8 @@ CACERT=${TOKEN_PATH}/ca.crt
 
 #set -e 
 
+source ./postdeploy_venv/bin/activate
+
 # Python here?
 python_version=$(python -V 2>&1)
 if [ $? -gt 0 ]; then
