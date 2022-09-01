@@ -1,0 +1,11 @@
+## Operational Decision Manager (ODM) (decisions pattern)
+
+Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=tasks-operational-decision-manager
+
+{% if 'bai' in sc_optional_components %}
+{% include 'component_bai.md.j2' ignore missing %}
+{% endif %}
+
+{% if 'decisionCenter' in sc_optional_components %}
+{% include 'component_decisionCenter.md.j2' ignore missing %}
+{% endif %}

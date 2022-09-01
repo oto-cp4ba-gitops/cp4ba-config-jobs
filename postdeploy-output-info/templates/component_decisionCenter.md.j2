@@ -1,0 +1,42 @@
+### Rule designer in eclipse
+
+Based on https://www.ibm.com/docs/en/cloud-paks/cp-biz-automation/22.0.1?topic=manager-installing-rule-designer
+
+Download Eclipse 2020-06 from https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/2020-06/R/eclipse-jee-2020-06-R-win32-x86_64.zip
+In the following URL you may want to use different rule designer version, replace 81100 with the appropriate version you need.  
+Go to https://marketplace.eclipse.org/content/ibm-operational-decision-manager-developers-v-811x-rule-designer
+Drag and drop Install button in your eclipse.  
+Confirm > Accept license > Finish  
+Wait for the installation completion.  
+Restart eclipse  
+Window > Perspective > Open Perspective > Other > Rule  
+
+Note: You may face JAXB exceptions when connecting to ODM. Using JDK8 resolve this error.  
+In you eclise.ini before -vmargs the following
+```text
+-vm 
+<path_to_jdk>\bin\javaw.exe
+```
+
+### Rule designer Zen connection
+
+Based on https://www.ibm.com/docs/en/odm/8.11.0?topic=parties-configuring-rule-designer  
+Download truststore.jks from https://cpd-{{ cp4ba_project_name }}.{{ apps_endpoint_domain }}/odm/decisioncenter/assets/truststore.jks and copy the file to your eclipse directory.  
+
+Based on https://www.ibm.com/docs/en/odm/8.11.0?topic=designer-passing-parameters-rule
+Add the following to eclipse.ini  
+```text
+-Djavax.net.ssl.trustStore=truststore.jks
+```
+
+When configuring RES connection in Deployment use  
+URL: https://cpd-{{ cp4ba_project_name }}.{{ apps_endpoint_domain }}/odm/res  
+Method: Zen API Key  
+UserID: cpadmin  
+API Key: As generated following https://www.ibm.com/docs/en/cloud-paks/1.0?topic=users-generating-api-keys-authentication
+
+When configuring Decision Center use  
+URL: https://cpd-{{ cp4ba_project_name }}.{{ apps_endpoint_domain }}/odm/decisioncenter  
+Authentication: Zen API Key  
+User ID: cpadmin  
+API Key: As generated following https://www.ibm.com/docs/en/cloud-paks/1.0?topic=users-generating-api-keys-authentication
