@@ -8,9 +8,9 @@ spec:
     spec:
       serviceAccountName: postdeploy-output-info-sa
       containers:
-      - name: output-info-config
+      - name: output-info-job
         image: quay.io/jeffetan/postdeploy-output-info
-        command: ["./postdeploy_configmap.sh"]
+        command: ["/home/worker/postdeploy_configmap.sh"]
         env:
         - name: KUBECONFIG
           value: "/tmp/config"
