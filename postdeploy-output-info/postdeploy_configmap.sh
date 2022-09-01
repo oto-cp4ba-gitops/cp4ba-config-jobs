@@ -44,7 +44,7 @@ sc_deployment_patterns=$(oc get ICP4ACluster icp4adeploy -n cp4ba -o jsonpath="{
 [ "x${sc_deployment_patterns}" != "x" ] && jinja_fill_command+=" -p ${sc_deployment_patterns}"
 
 # Generate postdeploy.md (default output filename):
-${jinja_fill_command}
+${jinja_fill_command} -o /tmp/postdeploy.md
 if [ $? -gt 0 ]; then
     echo "$0: $runout"
     exit 1
@@ -52,7 +52,7 @@ fi
 # If exitcode is zero, show stdout. It should report success.
 echo $runout
 # Create the configmap yaml with the empty postdeploy.md object:
-cat <<EOF > postdeploy_configmap.yaml
+cat <<EOF > /tmp/postdeploy_configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -66,9 +66,13 @@ data:
 EOF
 # jinja_fill command above should have already prepared the file postdeploy.md.
 # Append that to the empty data object in the configmap yaml, indented properly:
-cat postdeploy.md | sed 's/^/    /' >> postdeploy_configmap.yaml
+cat /tmp/postdeploy.md | sed 's/^/    /' >> /tmp/postdeploy_configmap.yaml
 
-# Just in case it already exists in the cluster, remove it first:
-oc delete configmap ${CONFIGMAP_NAME} -n ${NAMESPACE}
+# Just in case it already exists in the cluster, remove it first, after clearing finalizers:
+check_cm=$(oc get configmap ${CONFIGMAP_NAME} -n ${NAMESPACE} -o jsonpath="{$.metadata.name}" --ignore-not-found)
+if [ ${check_cm}x == ${CONFIGMAP_NAME}x ]; then
+       oc patch configmap ${CONFIGMAP_NAME} -n ${NAMESPACE} --type merge -p'{ "metadata": { "finalizers" : [] }}'
+       oc delete configmap ${CONFIGMAP_NAME} -n ${NAMESPACE}
+fi
 echo "posting postdeploy markdown as configmap."
-oc create -f postdeploy_configmap.yaml
+oc create -f /tmp/postdeploy_configmap.yaml
