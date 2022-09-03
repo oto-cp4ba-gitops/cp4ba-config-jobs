@@ -2,7 +2,8 @@ FROM quay.io/openshift/origin-cli:latest
 LABEL description="postdeploy-configmap"
 MAINTAINER Jeff Tan <jeffetan@au1.ibm.com>
 ENV WORKER_HOME=/home/worker
-RUN groupadd -r worker -f -g 1001 && \
+RUN yum update -y && \
+    groupadd -r worker -f -g 1001 && \
     useradd -u 1001 -r -g worker -m -d ${WORKER_HOME} -s /sbin/nologin \
     -c "Worker User" worker && \
     chown -R worker:worker ${WORKER_HOME} && \
@@ -19,5 +20,6 @@ COPY --chmod=744 ./jinja_fill.py jinja_fill.py
 COPY --chmod=755 ./postdeploy_configmap.sh postdeploy_configmap.sh
 RUN python -m venv postdeploy_venv && \
     . postdeploy_venv/bin/activate && \
+    pip install --upgrade pip && \
     python -m pip install jinja2
 ENTRYPOINT ["/home/worker/postdeploy_configmap.sh"]
